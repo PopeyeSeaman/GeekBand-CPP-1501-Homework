@@ -12,21 +12,48 @@ class Rectangle: public Shape
     Point* leftUp;
 
 public:
+    Rectangle():
+        width(0), height(0), leftUp(new Point(0, 0)) {}
+
     Rectangle(int width, int height, int x, int y): 
-        Shape(), width(width), height(height), leftUp(new Point(x, y)) {}
+        width(width), height(height), leftUp(new Point(x, y)) {}
     
     Rectangle(const Rectangle& other):
-        Shape(), width(other.width), height(other.height), leftUp(new Point(*other.leftUp)) {}
+        Shape(other), width(other.width), height(other.height)
+    {
+	if (other.leftUp != nullptr)
+	    this->leftUp = new Point(*other.leftUp);
+	else
+	    this->leftUp = nullptr;
+    }
     
     Rectangle& operator=(const Rectangle& other)
     {
-        this->width = other.width;
+	if (this == &other)        
+	    return *this;
+
+	Shape::operator=(other);
+
+	this->width = other.width;
         this->height = other.height;
-        this->leftUp = new Point(*other.leftUp);
+
+	if (other.leftUp != nullptr)
+	{
+	    if (this->leftUp != nullptr)
+		*this->leftUp = *other.leftUp;
+	    else 
+		this->leftUp = new Point(*other.leftUp);
+	}
+	else
+	{
+	    delete this->leftUp;
+	    this->leftUp = nullptr;
+	}
+
         return *this;
     }
 
-    ~Rectangle() {delete leftUp;}
+    ~Rectangle() { delete leftUp; }
 };
 
 #endif

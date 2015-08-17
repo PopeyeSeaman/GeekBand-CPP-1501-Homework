@@ -8,7 +8,7 @@ class Shape
     int no;
 
 public:
-    Shape() {no = ++g_no;}
+    Shape() { no = ++g_no; }
     ~Shape() {}
 };
 
