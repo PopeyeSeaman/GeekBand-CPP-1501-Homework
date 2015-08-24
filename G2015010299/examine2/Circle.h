@@ -4,6 +4,8 @@
 #include "Shape.h"
 #include "Point.h"
 
+#define PI 3.1416
+
 class Circle: public Shape
 {
     Point center;
@@ -16,7 +18,7 @@ public:
     
     virtual int getArea() const
     {
-	return int(3.14 * radius * radius);
+	return int(PI * radius * radius);
     }
 };
 

@@ -10,6 +10,7 @@ public:
     int getNo() const { return no; }
     
     virtual int getArea() const = 0;
+    virtual ~Shape() {}
 };
 
 #endif

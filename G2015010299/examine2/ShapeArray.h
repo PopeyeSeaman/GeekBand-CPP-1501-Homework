@@ -17,7 +17,7 @@ class ShapeArray
 public:
     ShapeArray(short capacity) : _capacity(capacity), _size(0)
     {
-	ary_shapes = (Shape**)malloc(sizeof(Shape*) * _capacity);
+	ary_shapes = new Shape*[_capacity];
     }
 
     void fill_rectangles(unsigned short quantity);
@@ -32,7 +32,7 @@ public:
     {
 	for (short i = 0; i < _size; i++)
 	{
-	    free(ary_shapes[i]);
+	    delete ary_shapes[i];
 	}
 	delete[] ary_shapes;
     }
@@ -88,7 +88,7 @@ void ShapeArray::del_small_shapes(int area_limit)
     {
 	if (ary_shapes[i]->getArea() < DEL_SHAPE_LIMIT)
 	{
-	    free(ary_shapes[i]);
+	    delete ary_shapes[i];
 	    ary_shapes[i] = nullptr;
 	}
     }
@@ -99,11 +99,13 @@ void ShapeArray::del_small_shapes(int area_limit)
    private函数，只在del_small_shapes(int)中被调用。*/
 void ShapeArray::regular_shapes()
 {
-    short last = 0;
+    short last = 0;  // 数组中第一个空（nullptr）元素的索引
     for (short i = 0; i < _size; i++)
     {
 	if (ary_shapes[i] != nullptr)
 	{
+	    // 将数组中的非空元素移到第一个空元素的位置，
+	    // 如果在它的位置之前没有空元素则不作处理。
 	    if (i > last)
 	    {
 		ary_shapes[last] = ary_shapes[i];
@@ -113,6 +115,7 @@ void ShapeArray::regular_shapes()
 	}
     }
 
+    // 相应调整数组size
     if (last != 0)
 	_size = last;
 }
@@ -120,7 +123,7 @@ void ShapeArray::regular_shapes()
 /* 把图形指针数组的容量调整到与现有元素个数一致。*/
 void ShapeArray::realloc_min_capacity()
 {
-    ary_shapes = (Shape**)realloc(ary_shapes, _size);
+    ary_shapes = (Shape**)realloc(ary_shapes, sizeof(Shape*) * _size);
     _capacity = _size;
 }
 
