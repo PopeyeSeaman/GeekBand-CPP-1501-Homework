@@ -9,7 +9,7 @@ class Shape
 
 public:
     Shape() { no = ++g_no; }
-    ~Shape() {}
+    virtual ~Shape() {}
 };
 
 #endif
